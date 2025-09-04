@@ -1,16 +1,12 @@
 pipeline {
     agent none  // We'll define agents per stage
 
-    environment {
-        MAVEN_HOME = "/usr/share/maven"  // Update this path if Maven is installed elsewhere
-    }
-
     stages {
         stage('Checkout') {
             agent { label 'slave1' }  // Checkout on slave1
             steps {
                 echo "Checking out code on ${env.NODE_NAME}"
-                git 'https://github.com/yourusername/your-maven-project.git'
+                git 'https://github.com/aryan-bhoi/cloudsim_final.git'
             }
         }
 
@@ -18,7 +14,7 @@ pipeline {
             agent { label 'slave1' }  // Compile on slave1
             steps {
                 echo "Compiling on ${env.NODE_NAME}"
-                sh "${MAVEN_HOME}/bin/mvn clean compile"
+                sh "mvn clean compile"
             }
         }
 
@@ -26,7 +22,7 @@ pipeline {
             agent { label 'slave2' }  // Run tests on slave2
             steps {
                 echo "Running tests on ${env.NODE_NAME}"
-                sh "${MAVEN_HOME}/bin/mvn test"
+                sh "mvn test"
             }
         }
 
@@ -34,7 +30,7 @@ pipeline {
             agent { label 'slave1' }  // Package on slave1
             steps {
                 echo "Packaging on ${env.NODE_NAME}"
-                sh "${MAVEN_HOME}/bin/mvn package"
+                sh "mvn package"
             }
         }
     }
