@@ -1,5 +1,5 @@
 pipeline {
-    agent none  // define agents per stage
+    agent none  // We'll define agents per stage
 
     stages {
         stage('Checkout') {
@@ -14,7 +14,7 @@ pipeline {
             agent { label 'slave1' }
             steps {
                 echo "Compiling on ${env.NODE_NAME}"
-                sh 'mvn clean compile'
+                sh "mvn clean compile"
             }
         }
 
@@ -22,7 +22,7 @@ pipeline {
             agent { label 'slave2' }
             steps {
                 echo "Running tests on ${env.NODE_NAME}"
-                sh 'mvn test'
+                sh "mvn test"
             }
         }
 
@@ -30,15 +30,19 @@ pipeline {
             agent { label 'slave1' }
             steps {
                 echo "Packaging on ${env.NODE_NAME}"
-                sh 'mvn package'
+                sh "mvn package"
             }
         }
     }
 
     post {
         always {
-            echo "Cleaning workspace on ${env.NODE_NAME}"
-            cleanWs()
+            script {
+                node {
+                    echo "Cleaning workspace..."
+                    cleanWs()
+                }
+            }
         }
         success {
             echo "Pipeline completed successfully!"
