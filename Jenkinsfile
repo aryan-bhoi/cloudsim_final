@@ -6,7 +6,7 @@ pipeline {
             agent { label 'slave1' }
             steps {
                 echo "Checking out code on ${env.NODE_NAME}"
-                git 'https://github.com/aryan-bhoi/cloudsim_final.git'
+                git branch: 'main', url: 'https://github.com/aryan-bhoi/cloudsim_final.git'
             }
         }
 
